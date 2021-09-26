@@ -1,17 +1,15 @@
 package git.noi8e;
 
+import git.noi8e.domain.ItemsForSearch;
 import git.noi8e.page.YaMarketPage;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 
-import static com.codeborne.selenide.Selenide.open;
+import java.util.stream.Stream;
 
+import static git.noi8e.page.YaMarketPage.URL;
 
 public class ParamExampleTest {
-
-
     YaMarketPage yaMarketPage = new YaMarketPage();
 
     @ValueSource(strings = {
@@ -22,7 +20,7 @@ public class ParamExampleTest {
     })
     @ParameterizedTest(name = "Search with value: {0}")
     void canSearchByValueSource(String value) {
-        yaMarketPage.openYaMarketPage(YaMarketPage.URL)
+        yaMarketPage.openYaMarketPage(URL)
                 .putValueInSearhInput(value)
                 .submitSearchForm()
                 .checkResult(value);
@@ -36,30 +34,34 @@ public class ParamExampleTest {
     }, delimiter = ';')
     @ParameterizedTest(name = "Search test with CsvSource: {0}, {1}")
     void searchTestWithCsvSource(String type, String manufacturer) {
-        yaMarketPage.openYaMarketPage(YaMarketPage.URL)
+        yaMarketPage.openYaMarketPage(URL)
                 .putValueInSearhInput(type + " " + manufacturer)
                 .submitSearchForm()
                 .checkResult(type);
     }
 
+    @EnumSource(ItemsForSearch.class)
+    @ParameterizedTest(name = "search with EnumClass: {0}")
+    void searchWithEnumExample(ItemsForSearch items) {
+        yaMarketPage.openYaMarketPage(URL)
+                .putValueInSearhInput(items.getDescription())
+                .submitSearchForm()
+                .checkResult(items.getDescription());
+    }
 
 
-//    static Stream<Arguments> testWithMethodSource() {
-//        return Stream.of(
-//                Arguments.of(
-//                        0, "Монитор"
-//                ),
-//                Arguments.of(
-//                        1, "Телефон"
-//                ),
-//                Arguments.of(
-//                        2, "Макароны"
-//                ),
-//                Arguments.of(
-//                        3, "Ноутбук"
-//                )
-//        );
-//    }
+    @MethodSource("stringProvider")
+    @ParameterizedTest()
+    void searchWithMethodSource(String s) {
+        yaMarketPage.openYaMarketPage(URL)
+                .putValueInSearhInput(s)
+                .submitSearchForm()
+                .checkResult(s);
 
+    }
+
+    static Stream<String> stringProvider() {
+        return Stream.of("мониторы DELL", "телефон SAMSUNG", "макароны BARILLA", "ноутбук LENOVO");
+    }
 
 }
