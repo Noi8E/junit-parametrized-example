@@ -20,8 +20,9 @@ dependencies {
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
-    sourceCompatibility = 11
-    targetCompatibility = 11
+// 11 - for Java 11, 8 - for Java 8
+    sourceCompatibility = 8
+    targetCompatibility = 8
 }
 
 tasks.withType(Test) {
