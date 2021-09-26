@@ -41,7 +41,7 @@ public class ParamExampleTest {
                 .submitSearchForm()
                 .checkResult(type);
     }
-    
+
 
 
 //    static Stream<Arguments> testWithMethodSource() {
